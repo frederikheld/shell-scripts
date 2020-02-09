@@ -4,7 +4,7 @@
 #		between networks with and without company proxy.
 #
 # Author:	Frederik S. Held (kontakt@frederikheld.de)
-# Date:		2019-01-31
+# Date:		2020-02-09
 #
 # Description:
 #
@@ -25,18 +25,23 @@
 #
 # Usage:
 #
-#	$ sudo sh toggle_cntlm.sh
+#	$ sudo sh toggle_proxy.sh
 #
 # Tested with Ubuntu 18.10 and cntlm 0.92.3-1ubun am64
 
 cntlm_config_path='/etc/cntlm.conf'
 
-echo 'Toggleing proxy configuration...'
+echo 'Toggling proxy configuration...'
 sed -i.bak '/^NoProxy/ s/^/~/' "$cntlm_config_path"	#  NoProxy --> ~NoProxy
 sed -i '/^#NoProxy/ s/^.//' "$cntlm_config_path"	# #NoProxy -->  NoProxy
 sed -i '/^~NoProxy/ s/^./#/' "$cntlm_config_path"	# ~Noproxy --> #NoProxy
 
 echo 'Restarting cntlm service...'
 sudo service cntlm restart
+
+echo -n 'Current proxy status is: '
+#echo `sh $PWD/get_proxy_status.sh`
+script_path=`dirname $0`
+echo `sh $script_path/get_proxy_status.sh`
 
 echo 'Done.'
